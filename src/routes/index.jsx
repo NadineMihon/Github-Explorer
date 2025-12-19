@@ -10,11 +10,11 @@ export const routesConfig = [
         element: <MainPage />
     },
     {
-        path: '/user/:username',
+        path: '/users/:username',
         element: <UserPage />
     },
     {
-        path: '/repo/:owner/:repo',
+        path: '/repos/:username/:repo',
         element: <RepoPage />
     }
 ];
