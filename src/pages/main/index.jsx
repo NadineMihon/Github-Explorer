@@ -1,9 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { Container } from "../../components/ui/Container";
+import { Wrapper } from "../../components/ui/Wrapper";
 import { SearchForm } from "./components/SearchForm";
 import { useGitHub } from "../../hooks/useGitHub";
-
-import * as SC from "./styles";
 
 export const MainPage = () => {
     const navigate = useNavigate();
@@ -29,9 +28,9 @@ export const MainPage = () => {
 
     return (
         <Container>
-            <SC.MainWrapper>
+            <Wrapper>
                 <SearchForm onSubmitForm={onSubmitForm} />
-            </SC.MainWrapper>  
+            </Wrapper>  
         </Container>
     )
 };

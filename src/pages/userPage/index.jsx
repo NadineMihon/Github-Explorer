@@ -2,6 +2,11 @@ import { useLocation, useParams } from "react-router-dom";
 import { useGitHub } from "../../hooks/useGitHub";
 import { useEffect } from "react";
 import { Container } from "../../components/ui/Container";
+import { Wrapper } from "../../components/ui/Wrapper";
+import { Typo } from "../../components/ui/Typo";
+import { Field } from "../../components/ui/Field";
+import { Subtitle } from "../../components/ui/Subtitle";
+import { Repos } from "../../components/Repos";
 
 export const UserPage = () => {
     const { username } = useParams();
@@ -23,12 +28,22 @@ export const UserPage = () => {
     const user = userData || initialUserData;
     const repos = reposData || initialReposData;
 
-    //console.log(user)
-    //console.log(repos)
-
     return (
         <Container>
-            <div>Страница пользователя {user.login}</div>    
+            <Wrapper>
+                <Typo>Страница пользователя - {user?.login}</Typo>
+                {
+                    !repos?.length && <Subtitle>Репозитории отсутствуют</Subtitle>
+                }
+                {
+                    !repos?.length || <>
+                        <Subtitle>Список доступных репозиториев:</Subtitle>
+                        <Field>
+                            <Repos repos={repos} />
+                        </Field>
+                    </>
+                }    
+            </Wrapper>
         </Container>
     )
 };

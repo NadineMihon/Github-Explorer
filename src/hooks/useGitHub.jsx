@@ -35,9 +35,9 @@ export const useGitHub = () => {
         }
     }, []);
 
-    const fetchUserRepo = useCallback(async () => {
+    const fetchUserRepo = useCallback(async (username, repoName) => {
         try {
-            const response = await fetch(`https://api.github.com/repos/${username}/${repo}`);
+            const response = await fetch(`https://api.github.com/repos/${username}/${repoName}`);
 
             if (!response.ok) throw new Error('Репозиторий не найден');
 
@@ -47,9 +47,35 @@ export const useGitHub = () => {
             return repoData;
 
         } catch (e) {
-            console.log (e);
+            console.log(e);
         }
-    })
+    }, []);
 
-    return { data, fetchUser, fetchUserRepos };
+    const fetchRepoReadme = useCallback(async (username, repoName) =>{
+        try {
+            const response = await fetch(`https://api.github.com/repos/${username}/${repoName}/readme`);
+
+            if (!response.ok) throw new Error('Файл README не найден');
+
+            const readmeData = await response.json();
+            setData(readmeData);
+
+            return readmeData;
+
+        } catch (e) {
+            console.log(e);
+        }
+    }, []);
+
+    const decodeReadme = useCallback((base64Content) => {
+        if (!base64Content) return '';
+
+        try {
+            return atob(base64Content);
+        } catch (e) {
+            console.log(e);
+        }
+    }, []);
+
+    return { data, fetchUser, fetchUserRepos, fetchUserRepo, fetchRepoReadme, decodeReadme };
 };
