@@ -2,6 +2,7 @@ import { useCallback, useState } from "react"
 
 export const useGitHub = () => {
     const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const fetchUser = useCallback(async (username) => {
         try {
@@ -52,6 +53,8 @@ export const useGitHub = () => {
     }, []);
 
     const fetchRepoReadme = useCallback(async (username, repoName) =>{
+        setLoading(true);
+
         try {
             const response = await fetch(`https://api.github.com/repos/${username}/${repoName}/readme`);
 
@@ -64,6 +67,8 @@ export const useGitHub = () => {
 
         } catch (e) {
             console.log(e);
+        } finally {
+            setLoading(false);
         }
     }, []);
 
@@ -77,5 +82,5 @@ export const useGitHub = () => {
         }
     }, []);
 
-    return { data, fetchUser, fetchUserRepos, fetchUserRepo, fetchRepoReadme, decodeReadme };
+    return { data, loading, fetchUser, fetchUserRepos, fetchUserRepo, fetchRepoReadme, decodeReadme };
 };

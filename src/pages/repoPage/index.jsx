@@ -1,11 +1,13 @@
+import ReactMarkdown from 'react-markdown';
 import { useLocation, useParams } from "react-router-dom";
 import { Container } from "../../components/ui/Container";
 import { Wrapper } from "../../components/ui/Wrapper";
 import { Typo } from "../../components/ui/Typo";
 import { Subtitle } from "../../components/ui/Subtitle";
+import { Loader } from "../../components/ui/Loader";
 import { useGitHub } from "../../hooks/useGitHub";
+import { useRepoHistory } from "../../hooks/useRepoHistory";
 import { useEffect } from "react";
-import ReactMarkdown from 'react-markdown';
 
 import * as SC from "./styles";
 
@@ -16,7 +18,8 @@ export const RepoPage = () => {
     const initialRepoData = location.state?.repo;
 
     const { data: repoData, fetchUserRepo } = useGitHub();
-    const { data: readmeData, fetchRepoReadme, decodeReadme } = useGitHub();
+    const { data: readmeData, loading, fetchRepoReadme, decodeReadme } = useGitHub();
+    const { addRepo } = useRepoHistory();
 
     useEffect(() => {
         if (username && repoName) {
@@ -28,11 +31,19 @@ export const RepoPage = () => {
     const repo = repoData || initialRepoData;
     const readmeContent = readmeData ? decodeReadme(readmeData.content) : '';
 
+    useEffect(() => {
+        addRepo(repo);
+    }, [repo]);
+
+    if (!repo || loading) return <Loader />
+
     return (
         <Container>
             <Wrapper>
-                <Typo>Страница репозитория - {repo?.name}</Typo>
-                <Subtitle>Язык: {repo?.language}</Subtitle>
+                <Typo>Страница репозитория - {repo.name}</Typo>
+                {
+                    repo.language && <Subtitle>Язык: {repo.language}</Subtitle>
+                }
                 {
                     !readmeContent || <>
                         <Subtitle>Содержание файла README.md:</Subtitle>

@@ -7,6 +7,7 @@ import { Typo } from "../../components/ui/Typo";
 import { Field } from "../../components/ui/Field";
 import { Subtitle } from "../../components/ui/Subtitle";
 import { Repos } from "../../components/Repos";
+import { Loader } from "../../components/ui/Loader";
 
 export const UserPage = () => {
     const { username } = useParams();
@@ -28,15 +29,17 @@ export const UserPage = () => {
     const user = userData || initialUserData;
     const repos = reposData || initialReposData;
 
+    if (!user || !repos ) return <Loader />
+
     return (
         <Container>
             <Wrapper>
-                <Typo>Страница пользователя - {user?.login}</Typo>
+                <Typo>Страница пользователя - {user.login}</Typo>
                 {
-                    !repos?.length && <Subtitle>Репозитории отсутствуют</Subtitle>
+                    !repos.length && <Subtitle>Репозитории отсутствуют</Subtitle>
                 }
                 {
-                    !repos?.length || <>
+                    !repos.length || <>
                         <Subtitle>Список доступных репозиториев:</Subtitle>
                         <Field>
                             <Repos repos={repos} />
